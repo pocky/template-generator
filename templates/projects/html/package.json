@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "@symfony/webpack-encore": "^1.1.2",
+    "autoprefixer": "^10.2.5",
+    "postcss": "^8.2.8",
+    "postcss-loader": "^5.2.0",
+    "sass": "^1.32.8",
+    "sass-loader": "^11.0.1",
+    "tailwindcss": "^2.0.4",
+    "webpack-notifier": "^1.13.0"
+  },
+  "license": "proprietary",
+  "private": true,
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  }
+}

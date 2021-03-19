@@ -1,0 +1,82 @@
+#!/bin/sh
+
+env=dev
+docker=false
+proxy=false
+clean=false
+
+for arg in "$@"; do
+    case "$arg" in
+    --env=*)
+        env=`echo $arg | sed 's/--env=//'`
+    ;;
+
+    --with-docker)
+        docker=true
+    ;;
+
+    --with-proxy)
+        proxy=true
+    ;;
+
+    --clean-before-tasks)
+        clean=true
+    ;;
+
+    --help)
+        echo 'usage: ./configure [options]'
+        echo ''
+        echo 'options:'
+        echo '  --env=<env>: current env (dev|labo|prod)'
+        echo '  --with-docker: enable docker'
+        echo '  --with-proxy: add proxy to docker'
+        echo '  --clean-before-tasks: remove build files'
+        echo ''
+        echo 'All invalid options are silently ignored!'
+        exit 0
+    ;;
+
+    esac
+done
+
+if [ $clean = true ]; then
+  echo "Clean old files"
+
+  preserve=(
+    .gitignore
+    configure
+    package.json
+    package-lock.json
+    postcss.config.js
+    README.md
+    webpack.config.js
+  )
+
+  find . -maxdepth 1 -type f $(for i in ${preserve[*]}; do echo "-not -name ${i}"; done) -exec rm -f "{}" \;
+fi
+
+echo "Generating files for $env environment..."
+cp -rT ./infrastructure/$env/autoconf/ ./
+
+if [ $docker = true ]; then
+  cp ./infrastructure/docker/autoconf/docker-compose.yaml.dist ./docker-compose.yaml
+  cp ./infrastructure/docker/autoconf/.dockerignore ./.dockerignore
+  cp ./infrastructure/docker/autoconf/Makefile.dist ./
+
+  if [ $proxy = true ]; then
+    echo "Oh! You want a reverse proxy!"
+    cp infrastructure/docker/autoconf/docker-compose.override.yaml.dist ./docker-compose.override.yaml
+
+    sed -i -e 's/80:80/80/g' ./docker-compose.yaml
+    sed -i -e 's/8025:8025/8025/g' ./docker-compose.yaml
+  fi
+fi
+
+if [ $env = prod ]; then
+  echo "Damn! production"
+  mv ./.htaccess ./public/
+fi
+
+mv ./Makefile.dist ./Makefile
+
+echo 'Configuration complete'

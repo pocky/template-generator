@@ -1,0 +1,30 @@
+version: '3.8'
+
+# Traefik is our exposed network
+networks:
+  traefik:
+    external: true
+
+services:
+  traefik:
+    image: traefik:maroilles
+    command: --api --docker --docker.exposedbydefault=false
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+      - "8025:8025"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+
+  nginx:
+    networks:
+      backend: ~
+      traefik: ~
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.frontend.rule=Host:www.akawaka.localhost"
+      - "traefik.port=80"

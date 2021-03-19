@@ -1,1 +1,67 @@
 #!/bin/bash
+
+project=html
+license=MIT
+repository=gitlab
+name=false
+
+for arg in "$@"; do
+	case "$arg" in
+
+	--name=*)
+        name=`echo $arg | sed 's/--name=//'`
+    ;;
+
+	--project=*)
+        project=`echo $arg | sed 's/--project=//'`
+    ;;
+
+	--license=*)
+        license=`echo $arg | sed 's/--license=//'`
+    ;;
+
+	--repository=*)
+        repository=`echo $arg | sed 's/--repository=//'`
+    ;;
+
+	--help)
+        echo 'usage: ./configure [options]'
+        echo ''
+        echo 'options:'
+        echo '  --name=<name>: name of project'
+        echo '  --project=<project>: target project (html)'
+		echo '  --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)'
+		echo '  --repository=<repository>: repository (gitlab)'
+        echo ''
+        echo 'All invalid options are silently ignored!'
+        exit 0
+    ;;
+
+	esac
+done
+
+if [ $name = false ]; then
+	echo "You must specify name option"
+	exit 0
+fi
+
+if [ -d ./generated/$name ]; then
+	echo "Directory already exist"
+	exit 0
+fi
+
+echo "Generating project $name..."
+
+cp -rT ./templates/default/ ./generated/$name
+cp -rT ./templates/configure/$project/ ./generated/$name
+cp -rT ./templates/projects/$project/ ./generated/$name
+
+echo "Add license $license..."
+cp ./templates/LICENSE/$license ./generated/$name/LICENSE
+
+if [ $repository = gitlab ]; then
+    cp -rT ./templates/docs/ ./generated/$name/.gitlab
+    cp -rT ./templates/CI/$project/ ./generated/$name/.gitlab
+fi
+
+echo 'Configuration complete'

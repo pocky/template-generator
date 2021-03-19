@@ -1,0 +1,47 @@
+stages:
+    - assets
+    - test
+    - deploy
+
+cache:
+    key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+
+assets:
+    image: node:buster-slim
+    stage: assets
+    script:
+        - npm install
+        - npm run build
+        - mv ./public/build ./build
+    artifacts:
+        paths:
+            - build
+        expire_in: 1 day
+
+pages:
+    image: alpine:latest
+    stage: deploy
+    script:
+        - mv ./build ./public
+    artifacts:
+        paths:
+            - public
+    needs:
+        - job: assets
+          artifacts: true
+    only:
+        - main
+
+test:
+    image: alpine:latest
+    stage: deploy
+    script:
+        - mv ./build ./public
+    artifacts:
+        paths:
+            - public
+    needs:
+        - job: assets
+          artifacts: true
+    except:
+        - main

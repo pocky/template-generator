@@ -1,9 +1,9 @@
 #!/bin/bash
 
-project=html
+project=blank
 license=MIT
-repository=gitlab
-name=false
+repository=
+name=
 
 for arg in "$@"; do
 	case "$arg" in
@@ -29,7 +29,7 @@ for arg in "$@"; do
         echo ''
         echo 'options:'
         echo '  --name=<name>: name of project'
-        echo '  --project=<project>: target project (html)'
+        echo '  --project=<project>: target project (blank, html)'
 		echo '  --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)'
 		echo '  --repository=<repository>: repository (gitlab)'
         echo ''
@@ -40,7 +40,7 @@ for arg in "$@"; do
 	esac
 done
 
-if [ $name = false ]; then
+if [ -z $name ]; then
 	echo "You must specify name option"
 	exit 0
 fi
@@ -53,15 +53,23 @@ fi
 echo "Generating project $name..."
 
 cp -rT ./templates/default/ ./generated/$name
-cp -rT ./templates/configure/$project/ ./generated/$name
-cp -rT ./templates/projects/$project/ ./generated/$name
+
+if [ $project != "blank" ]; then
+	cp -rT ./templates/configure/$project/ ./generated/$name
+	cp -rT ./templates/projects/$project/ ./generated/$name
+fi
 
 echo "Add license $license..."
 cp ./templates/LICENSE/$license ./generated/$name/LICENSE
 
-if [ $repository = gitlab ]; then
-    cp -rT ./templates/docs/ ./generated/$name/.gitlab
-    cp -rT ./templates/CI/$project/ ./generated/$name/.gitlab
+if [ ! -z $repository ]; then
+	cp -rT ./templates/docs/ ./generated/$name/.$repository
+
+	if [ -d ./templates/CI/$project/$repository/ ]; then
+		cp -rT ./templates/CI/$project/$repository/ ./generated/$name/.$repository
+	fi
+else
+	cp -rT ./templates/docs/ ./generated/$name/docs/
 fi
 
 echo 'Configuration complete'

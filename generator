@@ -25,7 +25,7 @@ for arg in "$@"; do
     ;;
 
 	--help)
-        echo 'usage: ./configure [options]'
+        echo 'usage: ./generator [options]'
         echo ''
         echo 'options:'
         echo '  --name=<name>: name of project'

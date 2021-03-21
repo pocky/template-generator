@@ -1,4 +1,4 @@
-# [name]
+# {name}
 
 // todo
 
@@ -29,9 +29,9 @@ This project is open source and this is our [support rules](docs/SUPPORT.md).
 
 ## License
 
-This project is licensed under [license].
+This project is licensed under {license}.
 
 ## Credits
 
-Created by [Alexandre Balmes](https://alexandre.balmes.co).
+Created by [{author.name}]({author.website}).
 See also the [thank you](/docs/thank-you.md).

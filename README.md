@@ -47,13 +47,13 @@ This project is open source and this is our [support rules](docs/SUPPORT.md).
 
 tl;dr:
 
-- Modifications must be shared, 
+- Modifications must be shared,
 - A commercial license is available.
 
-This project is licensed under AGPL-3.0. This license implies that if you modify 
+This project is licensed under AGPL-3.0. This license implies that if you modify
 this project, you must share those modifications. However, the AGPL-3.0 license applies only on this project.
 
-If you don't want to follow this or do not want to use AGPL-3.0 licensed software, 
+If you don't want to follow this or do not want to use AGPL-3.0 licensed software,
 you must buy commercial licenses. Contact us for more information.
 
 ## Credits

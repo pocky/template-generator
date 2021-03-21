@@ -1,0 +1,17 @@
+{
+	"author": {
+		"name": "Alexandre Balmes",
+		"email": "oss@alexandre.balmes.co",
+		"website": "https://alexandre.balmes.co"
+	},
+	"support": [
+		{
+			"name": "mail",
+			"url": "mailto:oss@alexandre.balmes.co"
+		},
+		{
+			"name": "twitter",
+			"url": "https://twitter.com/pockystar"
+		}
+	]
+}

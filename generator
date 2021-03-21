@@ -63,13 +63,45 @@ echo "Add license $license..."
 cp ./templates/LICENSE/$license ./generated/$name/LICENSE
 
 if [ ! -z $repository ]; then
-	cp -rT ./templates/docs/ ./generated/$name/.$repository
+	documentation=./generated/$name/.$repository
+
+	cp -rT ./templates/docs/ $documentation
 
 	if [ -d ./templates/CI/$project/$repository/ ]; then
-		cp -rT ./templates/CI/$project/$repository/ ./generated/$name/.$repository
+		cp -rT ./templates/CI/$project/$repository/ $documentation
 	fi
 else
-	cp -rT ./templates/docs/ ./generated/$name/docs/
+	documentation=./generated/$name/docs
+	cp -rT ./templates/docs/ $documentation
+fi
+
+echo "Replace content in files.."
+
+sed -i "s/{name}/$name/g" ./generated/$name/README.md
+sed -i "s/{license}/$license/g" ./generated/$name/README.md
+
+if [ -f "./data.json" ]; then
+
+	if [ ! $(command -v jq) &> /dev/null ]; then
+		echo "jq must be present on your system"
+		exit 0
+	fi
+
+	data=$(cat ./data.json)
+
+	sed -i "s/{author.name}/$(echo $data | jq -r '.author.name')/g" ./generated/$name/README.md
+	sed -i "s,{author.website},$(echo $data | jq -r '.author.website' ),g" ./generated/$name/README.md
+	sed -i "s,{author.email},$(echo $data | jq -r '.author.email' ),g" $documentation/CODE_OF_CONDUCT.md
+
+	counter=2
+	for k in $(jq -c '.support[]' <<< $data); do
+	    sed -i "$(awk "/^Is it possible to contact us by/{ print NR + $counter; exit }" $documentation/SUPPORT.md)s,.*,- [$(echo $k | jq -r '.name' )]($(echo $k | jq -r '.url' ))\\n," $documentation/SUPPORT.md
+		counter=$((counter + 1))
+	done
+else
+	echo ""
+	echo "⚠️⚠️⚠️ If you want to pimp your documentation files, copy data.json.dist to data.json and add changes your data!"
+	echo ""
 fi
 
 echo 'Configuration complete'

@@ -3,6 +3,7 @@
 project=blank
 license=MIT
 repository=
+docs=docs
 name=
 
 for arg in "$@"; do
@@ -62,23 +63,24 @@ fi
 echo "Add license $license..."
 cp ./templates/LICENSE/$license ./generated/$name/LICENSE
 
-if [ ! -z $repository ]; then
-	documentation=./generated/$name/.$repository
+documentation=./generated/$name/$docs
 
-	cp -rT ./templates/docs/ $documentation
+if [ ! -z $repository ]; then
+	docs=.$repository
+	documentation=./generated/$name/$docs
 
 	if [ -d ./templates/CI/$project/$repository/ ]; then
 		cp -rT ./templates/CI/$project/$repository/ $documentation
 	fi
-else
-	documentation=./generated/$name/docs
-	cp -rT ./templates/docs/ $documentation
 fi
+
+cp -rT ./templates/docs/ $documentation
 
 echo "Replace content in files.."
 
 sed -i "s/{name}/$name/g" ./generated/$name/README.md
 sed -i "s/{license}/$license/g" ./generated/$name/README.md
+sed -i "s/{docs.path}/$docs/g" ./generated/$name/README.md
 
 if [ -f "./data.json" ]; then
 
@@ -104,4 +106,4 @@ else
 	echo ""
 fi
 
-echo 'Configuration complete'
+echo "Configuration complete"

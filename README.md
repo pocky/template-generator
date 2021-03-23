@@ -33,15 +33,15 @@ And handle multiples repository templates is a pain :D
 
 ## Contributing
 
-See the [CONTRIBUTING](docs/CONTRIBUTING.md) file.
+See the [CONTRIBUTING]({docs.path}/CONTRIBUTING.md) file.
 
 ## Code of conduct
 
-Be nice and take a look on our [CODE OF CONDUCT](docs/CODE_OF_CONDUCT.md).
+Be nice and take a look on our [CODE OF CONDUCT]({docs.path}/CODE_OF_CONDUCT.md).
 
 ## Support
 
-This project is open source and this is our [support rules](docs/SUPPORT.md).
+This project is open source and this is our [support rules]({docs.path}/SUPPORT.md).
 
 ## License
 
@@ -59,4 +59,4 @@ you must buy commercial licenses. Contact us for more information.
 ## Credits
 
 Created by [Alexandre Balmes](https://alexandre.balmes.co).
-See also the [thank you](/docs/thank-you.md).
+See also the [thank you]({docs.path}/thank-you.md).

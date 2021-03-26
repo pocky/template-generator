@@ -13,5 +13,12 @@
 			"name": "twitter",
 			"url": "https://twitter.com/pockystar"
 		}
-	]
+	],
+	"php": {
+		"name": "foo/bar",
+		"description": "description",
+		"type": "library",
+		"psr4": "FOO\\Bar\\",
+		"version": "8.0"
+	}
 }

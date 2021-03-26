@@ -29,7 +29,22 @@ And handle multiples repository templates is a pain :D
 
 ## Usage
 
-// todo
+Output `./generator --help`
+
+```bash
+usage: ./generator [options]
+
+options:
+  --name=<name>: name of project
+  --project=<project>: target project (blank, html, php-library)
+  --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)
+  --repository=<repository>: repository (gitlab, github)
+
+All invalid options are silently ignored!
+```
+
+An extra file `data.json.dist` is available for custom data. Rename this file to `data.json` and install `jq` on your
+computer for more automation!
 
 ## Contributing
 

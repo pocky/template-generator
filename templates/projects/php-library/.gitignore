@@ -1,3 +1,4 @@
 # Don't forget to add a global gitignore!
 # see https://stackoverflow.com/questions/7335420/global-git-ignore#answer-7335487
 
+/vendor/

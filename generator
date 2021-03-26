@@ -80,6 +80,7 @@ echo "Replace content in files.."
 
 sed -i "s/{name}/$name/g" ./generated/$name/README.md
 sed -i "s/{license}/$license/g" ./generated/$name/README.md
+sed -i "s/{license}/$license/g" $documentation/CONTRIBUTING.md
 sed -i "s/{docs.path}/$docs/g" ./generated/$name/README.md
 
 if [ -f "./data.json" ]; then

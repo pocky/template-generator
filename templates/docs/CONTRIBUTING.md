@@ -6,12 +6,12 @@ Please note we have a [code of conduct](CODE_OF_CONDUCT.md), please follow it in
 
 ## License and Copyright Attribution
 
-When you open a Pull Request, you agree to license your code under the [AGPL-3.0](LICENSE) and 
+When you open a Pull Request, you agree to license your code under the [{license}](../LICENSE) and
 to transfer the copyright on the submitted code to the owner of this project.
 
 Be sure to you have the right to do that (if you are a professional, ask your company)!
 
-If you include code from another project, please mention it in the Pull Request description 
+If you include code from another project, please mention it in the Pull Request description
 and credit the original author.
 
 ## Reporting bugs
@@ -35,5 +35,5 @@ Here are a few rules to follow in order to ease code reviews and merging:
 One may ask you to [squash your commits](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html) too.
 This is used to "clean" your pull request before merging it (we don't want commits such as `fix tests`, `fix 2`, `fix 3`, etc.).
 
-When creating your pull request on GitHub, please write a description which gives the 
+When creating your pull request on GitHub, please write a description which gives the
 context and/or explains why you are creating it.

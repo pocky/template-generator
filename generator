@@ -30,9 +30,9 @@ for arg in "$@"; do
         echo ''
         echo 'options:'
         echo '  --name=<name>: name of project'
-        echo '  --project=<project>: target project (blank, html)'
+        echo '  --project=<project>: target project (blank, html, php-library)'
 		echo '  --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)'
-		echo '  --repository=<repository>: repository (gitlab)'
+		echo '  --repository=<repository>: repository (gitlab, github)'
         echo ''
         echo 'All invalid options are silently ignored!'
         exit 0
@@ -56,8 +56,13 @@ echo "Generating project $name..."
 cp -rT ./templates/default/ ./generated/$name
 
 if [ $project != "blank" ]; then
-	cp -rT ./templates/configure/$project/ ./generated/$name
-	cp -rT ./templates/projects/$project/ ./generated/$name
+	if [ -d ./templates/configure/$project/ ]; then
+		cp -rT ./templates/configure/$project/ ./generated/$name
+	fi
+
+	if [ -d ./templates/projects/$project/ ]; then
+		cp -rT ./templates/projects/$project/ ./generated/$name
+	fi
 fi
 
 echo "Add license $license..."
@@ -97,10 +102,23 @@ if [ -f "./data.json" ]; then
 	sed -i "s,{author.email},$(echo $data | jq -r '.author.email' ),g" $documentation/CODE_OF_CONDUCT.md
 
 	counter=2
+
 	for k in $(jq -c '.support[]' <<< $data); do
 	    sed -i "$(awk "/^Is it possible to contact us by/{ print NR + $counter; exit }" $documentation/SUPPORT.md)s,.*,- [$(echo $k | jq -r '.name' )]($(echo $k | jq -r '.url' ))\\n," $documentation/SUPPORT.md
 		counter=$((counter + 1))
 	done
+
+
+	if [ $project = "php-library" ]; then
+		sed -i "s,{php.name},$(echo $data | jq -r '.php.name'),g" ./generated/$name/composer.json
+		sed -i "s,{php.description},$(echo $data | jq -r '.php.description'),g" ./generated/$name/composer.json
+		sed -i "s,{php.type},$(echo $data | jq -r '.php.type'),g" ./generated/$name/composer.json
+		sed -i "s,{license},$license,g" ./generated/$name/composer.json
+		sed -i "s,{author.name},$(echo $data | jq -r '.author.name'),g" ./generated/$name/composer.json
+		sed -i "s,{author.email},$(echo $data | jq -r '.author.email'),g" ./generated/$name/composer.json
+		sed -i "s,{php.psr4},$(echo $data | jq -r '.php.psr4'| sed 's/\\/\\\\\\\\/g'),g" ./generated/$name/composer.json
+	fi
+
 else
 	echo ""
 	echo "⚠️⚠️⚠️ If you want to pimp your documentation files, copy data.json.dist to data.json and add changes your data!"

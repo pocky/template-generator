@@ -1,0 +1,28 @@
+# Don't forget to add a global gitignore!
+# see https://stackoverflow.com/questions/7335420/global-git-ignore#answer-7335487
+
+/Makefile
+/Makefile.local
+
+/infrastructure/dev/docker
+
+###> dev environment ##
+.editorconfig
+###< dev environment ###
+
+###> docker environment ##
+/docker-compose*
+/docker-dev.lock
+.dockerignore
+###< docker environment ###
+
+###> prod environment ##
+###< prod environment ###
+
+###> javascript ###
+/node_modules
+/npm-cache
+/public/build/
+npm-debug.log
+yarn-error.log
+###< javascript ###

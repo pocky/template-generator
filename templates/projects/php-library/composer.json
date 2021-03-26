@@ -1,0 +1,31 @@
+{
+    "name": "{php.name}",
+    "description": "{php.description}",
+    "type": "{php.type}",
+    "license": "{license}",
+    "authors": [
+        {
+            "name": "{author.name}",
+            "email": "{author.email}"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "{php.psr4}": "src/"
+        }
+    },
+	"require": {
+		"php": "^8.0"
+	},
+	"require-dev": {
+		"phpspec/phpspec": "^7.0",
+		"phpstan/phpstan": "^0.12",
+		"vimeo/psalm": "^3.11",
+		"roave/security-advisories": "dev-latest"
+	},
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    }
+}

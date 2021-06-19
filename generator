@@ -108,6 +108,9 @@ if [ -f "./data.json" ]; then
 		counter=$((counter + 1))
 	done
 
+	if [ $project = "html" ]; then
+		sed -i "s/{name}/$name/g" ./generated/$name/infrastructure/docker/autoconf/Makefile.dist
+	fi
 
 	if [ $project = "php-library" ]; then
 		sed -i "s,{php.name},$(echo $data | jq -r '.php.name'),g" ./generated/$name/composer.json

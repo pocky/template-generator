@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 DOCKER?=docker
 DOCKER_COMPOSE?=docker-compose
-EXECJS?=$(DOCKER) run -it --rm --name akawaka_node -v "$(shell pwd)/":/home/node/app -w /home/node/app node:buster-slim
+EXECJS?=$(DOCKER) run -it --rm --name {name}_node -v "$(shell pwd)/":/home/node/app -w /home/node/app node:buster-slim
 
 ##
 ## Project setup

@@ -2,7 +2,7 @@
 
 project=blank
 license=MIT
-repository=
+platform=
 docs=docs
 name=
 
@@ -21,8 +21,8 @@ for arg in "$@"; do
         license=`echo $arg | sed 's/--license=//'`
     ;;
 
-	--repository=*)
-        repository=`echo $arg | sed 's/--repository=//'`
+	--platform=*)
+        platform=`echo $arg | sed 's/--platform=//'`
     ;;
 
 	--help)
@@ -32,7 +32,7 @@ for arg in "$@"; do
         echo '  --name=<name>: name of project'
         echo '  --project=<project>: target project (blank, html, php-library)'
 		echo '  --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)'
-		echo '  --repository=<repository>: repository (gitlab, github)'
+		echo '  --platform=<platform>: platform (gitlab, github)'
         echo ''
         echo 'All invalid options are silently ignored!'
         exit 0
@@ -70,12 +70,12 @@ cp ./templates/LICENSE/$license ./generated/$name/LICENSE
 
 documentation=./generated/$name/$docs
 
-if [ ! -z $repository ]; then
-	docs=.$repository
+if [ ! -z $platform ]; then
+	docs=.$platform
 	documentation=./generated/$name/$docs
 
-	if [ -d ./templates/CI/$project/$repository/ ]; then
-		cp -rT ./templates/CI/$project/$repository/ $documentation
+	if [ -d ./templates/CI/$project/$platform/ ]; then
+		cp -rT ./templates/CI/$project/$platform/ $documentation
 	fi
 fi
 

@@ -56,9 +56,23 @@ if [ $update ]; then
 	data=$(cat ./templates.json)
 
 	for k in $(jq -c '.templates[]' <<< $data); do
-		rm -Rf ./templates/projects/$(echo $k | jq -r '.name' )
-		git clone --branch $(echo $k | jq -r '.branch' ) --depth 1 $(echo $k | jq -r '.url' ) ./templates/projects/$(echo $k | jq -r '.name' )
-		rm -Rf ./templates/projects/$(echo $k | jq -r '.name' )/.git
+		rname=$(echo $k | jq -r '.name' )
+
+		rm -Rf ./templates/projects/$rname
+		git clone --branch $(echo $k | jq -r '.branch' ) --depth 1 $(echo $k | jq -r '.url' ) ./templates/projects/$rname
+		rm -Rf ./templates/projects/$rname/.git
+
+		if [ $rname = "sylius-plugin" ]; then
+			cat ./templates/default/README.md >> ./templates/projects/$rname/README.md
+			sed -i "s|Modern Plugin Skeleton|{name}|g" ./templates/projects/$rname/README.md
+			sed -i "s|pocky/modern-plugin-skeleton|{php.name}|g" ./templates/projects/$rname/composer.json
+			sed -i "s|Acme example plugin for modern Sylius.|{php.description}|g" ./templates/projects/$rname/composer.json
+			sed -i "s|MIT|{license}|g" ./templates/projects/$rname/composer.json
+			sed -i "s|Acme\\\\\\\SyliusExamplePlugin\\\\\\\|{php.psr4}|g" ./templates/projects/$rname/composer.json
+			sed -i "s|Acme\\\\\\\Tests\\\\\\\SyliusExamplePlugin\\\\\\\|{php.psr4tests}|g" ./templates/projects/$rname/composer.json
+			echo "$(jq '. + {"authors": [{"name": "{author.name}","email": "{author.email}"}]}' ./templates/projects/$rname/composer.json)" > ./templates/projects/$rname/composer.json
+			rm -Rf ./templates/projects/$rname/.github
+		fi
 	done
 fi
 
@@ -104,17 +118,18 @@ cp -rT ./templates/docs/ $documentation
 
 echo "Replace content in files.."
 
-sed -i "s/{name}/$name/g" ./generated/$name/README.md
-sed -i "s/{license}/$license/g" ./generated/$name/README.md
-sed -i "s/{license}/$license/g" $documentation/CONTRIBUTING.md
-sed -i "s/{docs.path}/$docs/g" ./generated/$name/README.md
+sed -i "s|{name}|$name|g" ./generated/$name/README.md
+sed -i "s|{license}|$license|g" ./generated/$name/README.md
+sed -i "s|{license}|$license|g" $documentation/CONTRIBUTING.md
+sed -i "s|{docs.path}|$docs|g" ./generated/$name/README.md
 
 if [ -f "./data.json" ]; then
 	data=$(cat ./data.json)
 
-	sed -i "s/{author.name}/$(echo $data | jq -r '.author.name')/g" ./generated/$name/README.md
-	sed -i "s,{author.website},$(echo $data | jq -r '.author.website' ),g" ./generated/$name/README.md
-	sed -i "s,{author.email},$(echo $data | jq -r '.author.email' ),g" $documentation/CODE_OF_CONDUCT.md
+	sed -i "s|{author.name}|$(echo $data | jq -r '.author.name')|g" ./generated/$name/README.md
+	sed -i "s|{author.website}|$(echo $data | jq -r '.author.website' )|g" ./generated/$name/README.md
+	sed -i "s|{author.email}|$(echo $data | jq -r '.author.email' )|g" $documentation/CODE_OF_CONDUCT.md
+	sed -i "s|{author.nickname}|$(echo $data | jq -r '.author.nickname')|g" $documentation/CODEOWNERS
 
 	counter=2
 
@@ -124,17 +139,18 @@ if [ -f "./data.json" ]; then
 	done
 
 	if [ $project = "html" ]; then
-		sed -i "s/{name}/$name/g" ./generated/$name/infrastructure/docker/autoconf/Makefile.dist
+		sed -i "s|{name}|$name|g" ./generated/$name/infrastructure/docker/autoconf/Makefile.dist
 	fi
 
-	if [ $project = "php-library" ]; then
-		sed -i "s,{php.name},$(echo $data | jq -r '.php.name'),g" ./generated/$name/composer.json
-		sed -i "s,{php.description},$(echo $data | jq -r '.php.description'),g" ./generated/$name/composer.json
-		sed -i "s,{php.type},$(echo $data | jq -r '.php.type'),g" ./generated/$name/composer.json
-		sed -i "s,{license},$license,g" ./generated/$name/composer.json
-		sed -i "s,{author.name},$(echo $data | jq -r '.author.name'),g" ./generated/$name/composer.json
-		sed -i "s,{author.email},$(echo $data | jq -r '.author.email'),g" ./generated/$name/composer.json
-		sed -i "s,{php.psr4},$(echo $data | jq -r '.php.psr4'| sed 's/\\/\\\\\\\\/g'),g" ./generated/$name/composer.json
+	if [ $project = "php-library" ] || [ $project = "sylius-plugin" ]; then
+		sed -i "s|{php.name}|$(echo $data | jq -r '.php.name')|g" ./generated/$name/composer.json
+		sed -i "s|{php.description}|$(echo $data | jq -r '.php.description')|g" ./generated/$name/composer.json
+		sed -i "s|{php.type}|$(echo $data | jq -r '.php.type')|g" ./generated/$name/composer.json
+		sed -i "s|{license}|$license|g" ./generated/$name/composer.json
+		sed -i "s|{author.name}|$(echo $data | jq -r '.author.name')|g" ./generated/$name/composer.json
+		sed -i "s|{author.email}|$(echo $data | jq -r '.author.email')|g" ./generated/$name/composer.json
+		sed -i "s|{php.psr4}|$(echo $data | jq -r '.php.psr4'| sed 's/\\/\\\\\\\\/g')|g" ./generated/$name/composer.json
+		sed -i "s|{php.psr4tests}|$(echo $data | jq -r '.php.psr4tests'| sed 's/\\/\\\\\\\\/g')|g" ./generated/$name/composer.json
 	fi
 
 else

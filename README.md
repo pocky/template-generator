@@ -40,7 +40,7 @@ options:
   --project=<project>: target project (blank, html, php-library, sylius-plugin)
   --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)
   --repository=<repository>: repository (gitlab, github)
-  --update: update default templates
+  --update: update your templates
 
 All invalid options are silently ignored!
 ```

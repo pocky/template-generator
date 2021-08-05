@@ -2,7 +2,8 @@
 	"author": {
 		"name": "Alexandre Balmes",
 		"email": "oss@alexandre.balmes.co",
-		"website": "https://alexandre.balmes.co"
+		"website": "https://alexandre.balmes.co",
+		"nickname": "pocky"
 	},
 	"support": [
 		{
@@ -18,7 +19,7 @@
 		"name": "foo/bar",
 		"description": "description",
 		"type": "library",
-		"psr4": "FOO\\Bar\\",
-		"version": "8.0"
+		"psr4": "Foo\\Bar\\",
+		"psr4tests": "Foo\\Tests\\Bar\\"
 	}
 }

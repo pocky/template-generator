@@ -14,6 +14,11 @@
             "{php.psr4}": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "{php.psr4-tests}": "src/"
+        }
+    },
 	"require": {
 		"php": "^8.0"
 	},

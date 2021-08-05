@@ -1,0 +1,9 @@
+{
+	"templates": [
+		{
+			"name": "sylius-plugin",
+			"branch": "main",
+			"url": "git@github.com:pocky/ModernPluginSkeleton.git"
+		}
+	]
+}

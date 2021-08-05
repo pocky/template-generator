@@ -5,6 +5,7 @@ license=MIT
 platform=
 docs=docs
 name=
+update=
 
 for arg in "$@"; do
 	case "$arg" in
@@ -25,14 +26,19 @@ for arg in "$@"; do
         platform=`echo $arg | sed 's/--platform=//'`
     ;;
 
+	--update*)
+		update=`echo true | sed 's/--update//'`
+	;;
+
 	--help)
         echo 'usage: ./generator [options]'
         echo ''
         echo 'options:'
         echo '  --name=<name>: name of project'
-        echo '  --project=<project>: target project (blank, html, php-library)'
+        echo '  --project=<project>: target project (blank, html, php-library, sylius-plugin)'
 		echo '  --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)'
 		echo '  --platform=<platform>: platform (gitlab, github)'
+		echo '  --update'
         echo ''
         echo 'All invalid options are silently ignored!'
         exit 0
@@ -40,6 +46,21 @@ for arg in "$@"; do
 
 	esac
 done
+
+if [ ! $(command -v jq) &> /dev/null ]; then
+	echo "jq must be present on your system"
+	exit 0
+fi
+
+if [ $update ]; then
+	data=$(cat ./templates.json)
+
+	for k in $(jq -c '.templates[]' <<< $data); do
+		rm -Rf ./templates/projects/$(echo $k | jq -r '.name' )
+		git clone --branch $(echo $k | jq -r '.branch' ) --depth 1 $(echo $k | jq -r '.url' ) ./templates/projects/$(echo $k | jq -r '.name' )
+		rm -Rf ./templates/projects/$(echo $k | jq -r '.name' )/.git
+	done
+fi
 
 if [ -z $name ]; then
 	echo "You must specify name option"
@@ -89,12 +110,6 @@ sed -i "s/{license}/$license/g" $documentation/CONTRIBUTING.md
 sed -i "s/{docs.path}/$docs/g" ./generated/$name/README.md
 
 if [ -f "./data.json" ]; then
-
-	if [ ! $(command -v jq) &> /dev/null ]; then
-		echo "jq must be present on your system"
-		exit 0
-	fi
-
 	data=$(cat ./data.json)
 
 	sed -i "s/{author.name}/$(echo $data | jq -r '.author.name')/g" ./generated/$name/README.md

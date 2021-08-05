@@ -25,6 +25,7 @@ And handle multiples repository templates is a pain :D
 ## Installation
 
 - Clone this project
+- You __MUST__ have [jq](https://github.com/stedolan/jq) on your system
 - Profit!
 
 ## Usage
@@ -36,15 +37,15 @@ usage: ./generator [options]
 
 options:
   --name=<name>: name of project
-  --project=<project>: target project (blank, html, php-library)
+  --project=<project>: target project (blank, html, php-library, sylius-plugin)
   --license=<license>: license (AGPLv3, EUPLv1.2, GPLv3, MIT)
   --repository=<repository>: repository (gitlab, github)
+  --update: update default templates
 
 All invalid options are silently ignored!
 ```
 
-An extra file `data.json.dist` is available for custom data. Rename this file to `data.json` and install `jq` on your
-computer for more automation!
+An extra file `data.json.dist` is available for custom data. Rename this file to `data.json` for more automation!
 
 ## Contributing
 
